@@ -7,6 +7,21 @@ CalculiX
 A Free Software Three-Dimensional Structural Finite Element Program
 -------------------------------------------------------------------
 
+### Building with Pixi (Apple Silicon macOS)
+
+The [Pixi](https://pixi.sh/) environment provides the C and Fortran compilers,
+OpenBLAS, SPOOLES, and ARPACK. From the repository root, run:
+
+```sh
+pixi run build
+pixi run smoke
+```
+
+The executable is `build/pixi/CalculiX`. The build uses the serial CalculiX
+configuration; OpenBLAS may use threads internally. `pixi run clean` removes
+the build output. The committed `pixi.lock` pins the dependencies for
+`osx-arm64`.
+
 #### Authors:
 
 Guido Dhondt(Finite Element Solver)  

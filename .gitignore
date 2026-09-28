@@ -1,0 +1,5 @@
+/src/*.o
+/src/*.a
+/src/CalculiX
+/.pixi/
+/build/

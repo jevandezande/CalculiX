@@ -1,0 +1,38 @@
+# Build against the libraries and compilers in the active Pixi environment.
+ifndef CONDA_PREFIX
+$(error Run this Makefile with `pixi run build`)
+endif
+
+include src/Makefile.inc
+.DEFAULT_GOAL := all
+
+BUILD_DIR := build/pixi
+CC := clang
+FC := gfortran
+FFLAGS := -O2 -cpp -fallow-argument-mismatch -Isrc
+CFLAGS := -O2 -DARCH=Linux -DSPOOLES -DARPACK -DMATRIXSTORAGE -DNETWORKOUT -I$(CONDA_PREFIX)/include/spooles
+LIBS := $(CONDA_PREFIX)/lib/spooles.a -L$(CONDA_PREFIX)/lib -larpack -lopenblas -lm -lpthread
+
+FORTRAN_OBJECTS := $(addprefix $(BUILD_DIR)/,$(SCCXF:.f=.o))
+C_OBJECTS := $(addprefix $(BUILD_DIR)/,$(SCCXC:.c=.o))
+
+.PHONY: all clean
+all: $(BUILD_DIR)/CalculiX
+
+$(BUILD_DIR):
+	mkdir -p $@
+
+$(BUILD_DIR)/%.o: src/%.f | $(BUILD_DIR)
+	$(FC) $(FFLAGS) -c $< -o $@
+
+$(BUILD_DIR)/%.o: src/%.c | $(BUILD_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BUILD_DIR)/CalculiX.a: $(FORTRAN_OBJECTS) $(C_OBJECTS)
+	$(AR) rcs $@ $^
+
+$(BUILD_DIR)/CalculiX: $(BUILD_DIR)/CalculiX.o $(BUILD_DIR)/CalculiX.a
+	$(FC) -fopenmp -o $@ $^ $(LIBS)
+
+clean:
+	rm -rf $(BUILD_DIR)

@@ -1,0 +1,17 @@
+[workspace]
+name = "calculix"
+channels = ["conda-forge"]
+platforms = ["osx-arm64"]
+
+[dependencies]
+c-compiler = "*"
+fortran-compiler = "*"
+make = "*"
+openblas = "*"
+arpack = { version = "*", build = "nompi_*" }
+spooles = "*"
+
+[tasks]
+build = "make -f Makefile.pixi -j8"
+clean = "make -f Makefile.pixi clean"
+smoke = { cmd = "sh scripts/smoke-pixi.sh", depends-on = ["build"] }
