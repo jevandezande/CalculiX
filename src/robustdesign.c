@@ -332,11 +332,16 @@ void robustdesign(double *co,ITG *nk,ITG **konp,ITG **ipkonp,char **lakonp,
   
   /* calculation of gaussian random fields for robust optimization */
   
+#ifdef ARPACK
   randomfieldmain(kon,ipkon,lakon,ne,nmpc,nactdof,mi,nodedesi,&ndesi,
 		  istartdesi,ialdesi,co,physcon,isolver,ntrans,nk,inotr,trab,jobnamec,
 		  nboun,cs,mcs,inum,nmethod,kode,filab,nstate_,istep,description,set,
 		  nset,iendset,output,istartset,ialset,extnor,irandomtype,randomval,
 		  irobustdesign,&ndesibou,nodedesibou,nodedesiinvbou); 
+#else
+  fprintf(stderr,"*ERROR: robust design analysis requires ARPACK\n");
+  exit(EXIT_FAILURE);
+#endif
     		       
   SFREE(inum);SFREE(extnor);
   if(irobustdesign[2]==1){SFREE(nodedesibou);SFREE(nodedesiinvbou);}	  

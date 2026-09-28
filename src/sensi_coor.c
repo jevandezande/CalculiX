@@ -987,10 +987,15 @@ void sensi_coor(double *co,ITG *nk,ITG **konp,ITG **ipkonp,char **lakonp,
     /* Backward filtering of sensitivities 
        --> variable transformation from x to s */
   
+#ifdef ARPACK
     filterbackwardmain(co,dgdxglob,nobject,nk,nodedesi,ndesi,objectset,
 	       xdesi,nobjectstart,iponoelfa,inoelfa,lakonfa,
 	       konfa,ipkonfa,nodedesiinv,istartdesi,ialdesi,ipkon,lakon,
 	       ipoface,nodface,kon,&iregion,isolver,dgdx,ne,&nsurfs);
+#else
+    fprintf(stderr,"*ERROR: sensitivity filtering requires ARPACK\n");
+    exit(EXIT_FAILURE);
+#endif
 
     /* createinum is called in order to determine the nodes belonging
        to elements; this information is needed in frd_se */

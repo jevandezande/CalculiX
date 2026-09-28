@@ -1641,7 +1641,7 @@ int main(int argc,char *argv[])
     }
 
     else if(nmethod==16){
-    
+#ifdef ARPACK
       feasibledirection(&nobject,&objectset,&dgdxglob,g0,&ndesi,nodedesi,&nk,
 			&isolver,&ipkon,&kon,&lakon,&ne,nelemload,&nload,
 			nodeboun,&nboun,ndirboun,ithermal,co,vold,mi,&ielmat,
@@ -1650,7 +1650,10 @@ int main(int argc,char *argv[])
 			&ntrans,inotr,trab,orname,xdesi,timepar,coini,ikboun,
 			nactdof,&ne2d,&nkon,tieset,&ntie,knor,iponoel2d,iponor,
 			inoel2d);         
-      
+#else
+      fprintf(stderr,"*ERROR: feasible direction analysis requires ARPACK\n");
+      exit(EXIT_FAILURE);
+#endif
     }
 
     SFREE(nactdof);SFREE(icol);SFREE(jq);SFREE(irow);SFREE(ipobody);

@@ -1,0 +1,23 @@
+# Native macOS build with Homebrew GCC and OpenBLAS.
+CC = gcc-16
+FC = gfortran-16
+CFLAGS = -O2 -fopenmp -DARCH=Linux -DMATRIXSTORAGE -DNETWORKOUT
+FFLAGS = -O2 -cpp -fopenmp -fallow-argument-mismatch
+OPENBLAS = /opt/homebrew/opt/openblas/lib/libopenblas.dylib
+
+include Makefile.inc
+
+OCCXF = $(SCCXF:.f=.o)
+OCCXC = $(SCCXC:.c=.o)
+
+.c.o:
+	$(CC) $(CFLAGS) -c $<
+
+.f.o:
+	$(FC) $(FFLAGS) -c $<
+
+CalculiX: CalculiX.o CalculiX.a
+	$(FC) -fopenmp -o $@ CalculiX.o CalculiX.a $(OPENBLAS) -lm
+
+CalculiX.a: $(OCCXF) $(OCCXC)
+	ar rcs $@ $?
