@@ -15,3 +15,6 @@ spooles = "*"
 build = "make -f Makefile.pixi -j8"
 clean = "make -f Makefile.pixi clean"
 smoke = { cmd = "sh scripts/smoke-pixi.sh", depends-on = ["build"] }
+bench = { cmd = "python3.12 bench/block.py", depends-on = ["build"] }
+bench-quick = { cmd = "python3.12 bench/block.py quick", depends-on = ["build"] }
+bench-sweep = { cmd = "python3.12 bench/block.py --sweep", depends-on = ["build"] }
