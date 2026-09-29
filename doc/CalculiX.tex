@@ -11024,10 +11024,11 @@ $\delta=10^{-4}$ was taken.
 In the input deck the Johnson-Cook model is activated by the HARDENING=JOHNSON
 COOK parameter on the \htmlref{*PLASTIC}{plastic} card. Underneath this card
 the rate-independent terms are defined, i.e. the parameters $A,B,n,m,T_m$ and
-$T_0$. If $T_m=T_0$ no temperature dependence is taken into account. The rate
-dependence has to be defined using a \htmlref{*RATE DEPENDENT}{ratedependent}
-card with the parameter TYPE=JOHNSON COOK, listing underneath the parameters
-$C$ and $\dot{\epsilon}_0$.
+$T_0$. If $T_m=T_0$ no temperature dependence is taken into account. A
+\htmlref{*RATE DEPENDENT}{ratedependent} card with TYPE=JOHNSON COOK is
+required even when rate dependence is not wanted. It supplies $C$ and
+$\dot{\epsilon}_0$; set $C=0$ and choose a positive $\dot{\epsilon}_0$ to
+disable rate dependence.
 
 The name of a material with Johnson-Cook hardening is not allowed to contain
 more than 69 characters.
@@ -27762,10 +27763,9 @@ uhardening.f
 
 For Johnson-Cook hardening the temperature dependence is included in the model
 equations. However, it may be deactivated by setting the transition
-temperature equal to the melt temperature. For
-Johnson-Cook hardening the material must be isotropic and a \htmlref{*RATE
-  DEPENDENT}{ratedependent} card must be used to define the rate dependence of
-the hardening curve.
+temperature equal to the melt temperature. For Johnson-Cook hardening the
+material must be isotropic. A \htmlref{*RATE DEPENDENT}{ratedependent} card is
+required even when $C=0$.
 
 For all other hardening types different rules apply. If the elastic data is isotropic, the large strain viscoplastic theory
 treated in \cite{Simo3} and \cite{Simo4} is applied if the NLGEOM parameter is
@@ -28208,9 +28208,10 @@ Example files: oneel8ra, beamhtcr.
 
 Keyword type: model definition, material
 
-This option is used to define the rate dependence of the yield surface
-according to the Johnson-Cook model (cf. Section \ref{johnsoncook}). There is
-one required parameter TYPE=JOHNSON COOK. 
+This option supplies the rate parameters for the Johnson-Cook model (cf.
+Section \ref{johnsoncook}) and is required for every Johnson-Cook material.
+Set $C=0$ and $\dot{\epsilon}_0>0$ when rate dependence is not wanted. The
+required parameter is TYPE=JOHNSON COOK.
 
 \bigskip
 
