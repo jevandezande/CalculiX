@@ -7,8 +7,18 @@ include src/Makefile.inc
 .DEFAULT_GOAL := all
 
 BUILD_DIR := build/pixi
+# conda-forge's C compiler is clang on macOS and gcc on Linux.
+ifeq ($(shell uname -s),Linux)
+CC := gcc
+else
 CC := clang
+endif
 FC := gfortran
+# The Linux compiler prefix ships bin/<triple>-ar and does not put ar on PATH.
+CONDA_AR := $(firstword $(wildcard $(CONDA_PREFIX)/bin/*-linux-gnu-ar))
+ifneq ($(CONDA_AR),)
+AR := $(CONDA_AR)
+endif
 FFLAGS := -O2 -cpp -fallow-argument-mismatch -Isrc
 CFLAGS := -O2 -DARCH=Linux -DSPOOLES -DARPACK -DMATRIXSTORAGE -DNETWORKOUT -I$(CONDA_PREFIX)/include/spooles
 LIBS := $(CONDA_PREFIX)/lib/spooles.a -L$(CONDA_PREFIX)/lib -larpack -lopenblas -lm -lpthread
