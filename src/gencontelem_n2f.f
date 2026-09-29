@@ -31,7 +31,7 @@
       implicit none
 !     
       character*8 lakon(*)
-      character*33 cfile
+      character*132 cfile
       character*81 tieset(3,*),slavset,set(*),noset,setname
       character*87 filab(*)
       character*132 jobnamef(*)
